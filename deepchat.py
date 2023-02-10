@@ -29,7 +29,7 @@ def push_in_queue(item):
 
 header_color = '\033[1;30;47m'
 text_color = '\033[0;36m'
-prompt_color = '\033[0;34m'
+prompt_color = '\033[0;35m'
 
 os.system('clear')
 
