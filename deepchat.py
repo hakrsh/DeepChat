@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 import os
 from halo import Halo
 import logging
+import pickle
 logging.basicConfig(level=logging.ERROR,filename='deepchat.log',filemode='w',format='%(name)s - %(levelname)s - %(message)s')
 
 
@@ -18,6 +19,11 @@ queue = []
 max_prompt_tokens = 3000
 current_prompt_tokens = 0
 
+backup_dir = './backup'
+export_dir = './export'
+
+os.makedirs(backup_dir,exist_ok=True)
+os.makedirs(export_dir,exist_ok=True)
 
 def push_in_queue(item): 
     global queue, current_prompt_tokens, max_prompt_tokens
@@ -40,15 +46,65 @@ print(text_color + ' You can ask DeepChat any question and it will do its best t
 print(header_color + '\n Instructions: ' + '\033[0m')
 print(text_color + '\n 1. Type in your question. ' + '\033[0m')
 print(text_color + ' 2. Press enter to send. ' + '\033[0m')
-print(text_color + ' 3. Type "exit" to quit the program.\n' + '\033[0m')
+print(text_color + ' 3. Type "help" to see the available commands' + '\033[0m')
+print(text_color + ' 4. Type "exit" to quit the program.\n' + '\033[0m')
 
 print(text_color + ' Let\'s get started!\n' + '\033[0m')
 
 while True:
-    prompt = input(prompt_color + "\nPrompt: \033[0m")
+    prompt = input(prompt_color + "Prompt: \033[0m")
     if prompt == 'exit':
         print(header_color + '\n Thank you for using DeepChat! Have a great day. ' + '\033[0m')
         break
+    elif prompt == 'new':
+        queue = []
+        current_prompt_tokens = 0
+        print(header_color + '\n New conversation started. ' + '\033[0m')
+        continue
+    elif prompt == 'export':
+        filename = input(prompt_color + "\nFilename: \033[0m")
+        filename = os.path.join(export_dir,filename) + '.txt'
+        with open(filename, 'w') as f:
+            f.write("\n".join([x[0] for x in queue]))
+        print(header_color + '\n Conversation exported to ' + filename + '\033[0m')
+        continue
+    elif prompt == 'save':
+        filename = input(prompt_color + "\nFilename: \033[0m")
+        filename = os.path.join(backup_dir,filename) + '.pickle'
+        with open(filename, 'wb') as f:
+            pickle.dump(queue, f)
+        print(header_color + '\n Conversation saved to ' + filename + '\033[0m')
+        print("")
+        continue
+    elif prompt == 'list':
+        chats = os.listdir(backup_dir)
+        print(header_color + '\n Chats: ' + '\033[0m' + '\n')
+        for chat in enumerate(chats):
+            msg = f"{chat[0]+1}. {chat[1].split('.')[0]}"
+            print(text_color + msg + '\033[0m')
+        print("")
+        continue
+    elif prompt == 'load':
+        filename = input(prompt_color + "\nFilename: \033[0m")
+        filename = os.path.join(backup_dir,filename) + '.pickle'
+        if not os.path.exists(filename):
+            print(header_color + '\n File not found. ' + '\033[0m')
+            continue
+        with open(filename, 'rb') as f:
+            queue = pickle.load(f)
+        current_prompt_tokens = sum([x[1] for x in queue])
+        print(header_color + '\n Conversation loaded from ' + filename + '\033[0m')
+        print("")
+        continue
+    elif prompt == 'help':
+        print(header_color + '\n Commands: \n' + '\033[0m')
+        print(text_color + ' new: Start a new conversation.' + '\033[0m')
+        print(text_color + ' export: Export the conversation to a file.' + '\033[0m')
+        print(text_color + ' save: Save the conversation to a file.' + '\033[0m')
+        print(text_color + ' list: List all saved conversations.' + '\033[0m')
+        print(text_color + ' load: Load a saved conversation.' + '\033[0m')
+        print(text_color + ' exit: Exit the program.\n' + '\033[0m')
+        continue
     print("")
     history = "\n".join([x[0] for x in queue])
     combined_prompt = f'{history}\n{prompt}\n'
