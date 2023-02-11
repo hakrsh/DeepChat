@@ -55,11 +55,13 @@ while True:
     prompt = input(prompt_color + "Prompt: \033[0m")
     if prompt == 'exit':
         print(header_color + '\n Thank you for using DeepChat! Have a great day. ' + '\033[0m')
+        print("")
         break
     elif prompt == 'new':
         queue = []
         current_prompt_tokens = 0
         print(header_color + '\n New conversation started. ' + '\033[0m')
+        print("")
         continue
     elif prompt == 'export':
         filename = input(prompt_color + "\nFilename: \033[0m")
@@ -67,6 +69,7 @@ while True:
         with open(filename, 'w') as f:
             f.write("\n".join([x[0] for x in queue]))
         print(header_color + '\n Conversation exported to ' + filename + '\033[0m')
+        print("")
         continue
     elif prompt == 'save':
         filename = input(prompt_color + "\nFilename: \033[0m")

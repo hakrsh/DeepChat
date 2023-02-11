@@ -7,10 +7,7 @@ DeepChat is a simple command-line chatbot powered by OpenAI, providing real-time
 
 ## Getting Started
 ### Motivation
-ChatGPT is fantastic, but the constant errors caused by high traffic are frustrating. That's why I thought about creating a custom CLI chatboot, based on OpenAI's GPT-3 API, which has less traffic compared to ChatGPT. To get started, you need to generate an API key from the OpenAI website and store it in a file called .env with the following format:
-<br>
-`OPENAI_API_KEY1=sk-C11pi...`
-
+With ChatGPT, you have access to a powerful conversational AI, but the high traffic can be frustrating. That's why I have created a custom chatbot solution, based on OpenAI's GPT-3 API, to provide a more efficient and stable experience. To get started, all you have to do is generate an API key from the OpenAI website, store it in a .env file, and you can start building your own, custom conversations. From powerful, interactive dialogues to automated customer service, this solution enables you to create valuable and reliable AI-driven conversational experiences. What's more, you can also save, load and export chats with ease, giving you complete control over your conversations and data.
 
 ### Prerequisites
 
