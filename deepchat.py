@@ -100,13 +100,21 @@ while True:
         print(header_color + '\n Conversation loaded from ' + filename + '\033[0m')
         print("")
         continue
+    elif prompt == 'clear':
+        # Remove all saved conversations
+        for filename in os.listdir(backup_dir):
+            os.remove(os.path.join(backup_dir,filename))
+        print(header_color + '\n All saved conversations have been deleted. ' + '\033[0m')
+        print("")
+        continue
     elif prompt == 'help':
         print(header_color + '\n Commands: \n' + '\033[0m')
         print(text_color + ' new: Start a new conversation.' + '\033[0m')
-        print(text_color + ' export: Export the conversation to a file.' + '\033[0m')
+        print(text_color + ' export: Export the conversation to a text file.' + '\033[0m')
         print(text_color + ' save: Save the conversation to a file.' + '\033[0m')
         print(text_color + ' list: List all saved conversations.' + '\033[0m')
         print(text_color + ' load: Load a saved conversation.' + '\033[0m')
+        print(text_color + ' clear: Delete all saved conversations.' + '\033[0m')
         print(text_color + ' exit: Exit the program.\n' + '\033[0m')
         continue
     print("")
