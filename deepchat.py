@@ -58,6 +58,7 @@ while True:
         print("")
         break
     elif prompt == 'new':
+        os.system('clear')
         queue = []
         current_prompt_tokens = 0
         print(header_color + '\n New conversation started. ' + '\033[0m')
