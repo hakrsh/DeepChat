@@ -3,6 +3,8 @@
 DeepChat is a simple command-line chatbot powered by OpenAI, providing real-time Q&A with a user-friendly interface following Material Design guidelines.
 
 ![DeepChat Demo](demo.jpg)
+![YTRecap Demo](ytrecap.jpg)
+
 
 
 ## Getting Started

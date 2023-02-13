@@ -133,9 +133,9 @@ while True:
             continue
         transcript_text = get_transcript_text(transcript).split('\n')
         print(header_color + f'\n Video Title: {video_title}' + '\033[0m')
-        print(text_color + f"\n Transcript:\033[0m\n")
+        # print(text_color + f"\n Transcript:\033[0m\n")
         joined_transcript = ' '.join(transcript_text)
-        print(joined_transcript)
+        # print(joined_transcript)
         print("")
         err_flag = False
         with Halo(text='Getting Summary...', spinner='dots'):
