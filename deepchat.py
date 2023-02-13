@@ -3,7 +3,8 @@ import os
 from halo import Halo
 import logging
 import pickle
-logging.basicConfig(level=logging.ERROR,filename='deepchat.log',filemode='w',format='%(name)s - %(levelname)s - %(message)s')
+from ytrecap import is_youtube_url,get_youtube_title, get_transcript, get_transcript_text
+logging.basicConfig(level=logging.ERROR,filename='deepchat.log',filemode='a',format='%(name)s - %(levelname)s - %(message)s')
 
 
 load_dotenv()
@@ -117,6 +118,20 @@ while True:
         print(text_color + ' clear: Delete all saved conversations.' + '\033[0m')
         print(text_color + ' exit: Exit the program.\n' + '\033[0m')
         continue
+    elif is_youtube_url(prompt):
+        title = get_youtube_title(prompt)
+        if title is None:
+            print(header_color + '\n Oops! Video not found. ' + '\033[0m')
+            print("")
+            continue
+        transcript = get_transcript(prompt)
+        if transcript is None:
+            print(header_color + '\n Oops! No English subtitles are available. ' + '\033[0m')
+            print("")
+            continue
+        transcript_text = get_transcript_text(transcript)
+        # prompt = f'Video Title: {title}\nTranscript: {transcript_text}\nTimestamp: {transcript}\n\nGet the summary of the video'
+        prompt = f'Video Title: {title}\nTranscript: {transcript_text}\n\nCan you summarise this.\n'
     print("")
     history = "\n".join([x[0] for x in queue])
     combined_prompt = f'{history}\n{prompt}\n'
