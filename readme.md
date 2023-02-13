@@ -7,8 +7,13 @@ DeepChat is a simple command-line chatbot powered by OpenAI, providing real-time
 
 ## Getting Started
 ### Motivation
-With ChatGPT, you have access to a powerful conversational AI, but the high traffic can be frustrating. That's why I have created a custom chatbot solution, based on OpenAI's GPT-3 API, to provide a more efficient and stable experience. To get started, all you have to do is generate an API key from the OpenAI website, store it in a .env file, and you can start building your own, custom conversations. From powerful, interactive dialogues to automated customer service, this solution enables you to create valuable and reliable AI-driven conversational experiences. What's more, you can also save, load and export chats with ease, giving you complete control over your conversations and data.
+<!-- With ChatGPT, you have access to a powerful conversational AI, but the high traffic can be frustrating. That's why I have created a custom chatbot solution, based on OpenAI's GPT-3 API, to provide a more efficient and stable experience. To get started, all you have to do is generate an API key from the OpenAI website, store it in a .env file, and you can start building your own, custom conversations. From powerful, interactive dialogues to automated customer service, this solution enables you to create valuable and reliable AI-driven conversational experiences. What's more, you can also save, load and export chats with ease, giving you complete control over your conversations and data. -->
 
+Introducing the next generation of chatbots powered by OpenAI's GPT-3 API! Say goodbye to clunky, unreliable chatbots and hello to a more efficient and user-friendly solution. With our custom chatbot solution, you can create powerful, interactive dialogues and automated customer service experiences that will leave a lasting impression on your users. Our solution is easy to use, just generate an API key from the OpenAI website and store it in a .env file and you're ready to start building your own custom conversations.
+
+But that's not all! Our solution also offers advanced features such as the ability to generate summaries of YouTube videos, providing your users with quick and relevant information at their fingertips. You can even customize the length and detail of the summaries to meet the unique needs of your audience. With our solution, you can save, load and export chats with ease, giving you complete control over your conversations and data.
+
+Experience the future of chatbots with our custom chatbot solution, designed to deliver valuable and reliable AI-driven conversational experiences that will enhance your brand and boost customer satisfaction. Get started today and see the difference for yourself!
 ### Prerequisites
 
 You'll need to generate an OpenAI API key and store it in your environment variables as `OPENAI_API_KEY`. You can do this by following the instructions on the OpenAI website.
