@@ -27,6 +27,10 @@ To run the chatbot, simply run the following command in your terminal: `python d
 
 The chatbot should start up, and you can start interacting with it.
 
+### OpenAI API Credit and Usage Tracking
+
+OpenAI API offers free trial accounts with a credit of <b>$18</b>. For more information on pricing, see the FAQ section on the OpenAI API pricing page at https://openai.com/api/pricing/#faq-completions-pricing. To track your usage, you can visit the account usage page on the OpenAI platform at https://platform.openai.com/account/usage.
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
