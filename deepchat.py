@@ -3,7 +3,8 @@ import os
 from halo import Halo
 import logging
 import pickle
-logging.basicConfig(level=logging.ERROR,filename='deepchat.log',filemode='w',format='%(name)s - %(levelname)s - %(message)s')
+from ytrecap import is_youtube_url,get_youtube_title, get_transcript, get_transcript_text
+logging.basicConfig(level=logging.ERROR,filename='deepchat.log',filemode='a',format='%(name)s - %(levelname)s - %(message)s')
 
 
 load_dotenv()
@@ -16,8 +17,10 @@ import openai
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 queue = []
-max_prompt_tokens = 3000
+max_prompt_tokens = 2000
 current_prompt_tokens = 0
+youtube_mode = False
+joined_transcript = ""
 
 backup_dir = './backup'
 export_dir = './export'
@@ -52,12 +55,14 @@ print(text_color + ' 4. Type "exit" to quit the program.\n' + '\033[0m')
 print(text_color + ' Let\'s get started!\n' + '\033[0m')
 
 while True:
-    prompt = input(prompt_color + "Prompt: \033[0m")
+    prompt = input(prompt_color + "Prompt: \033[0m").strip()
     if prompt == 'exit':
         print(header_color + '\n Thank you for using DeepChat! Have a great day. ' + '\033[0m')
         print("")
         break
     elif prompt == 'new':
+        youtube_mode = False
+        joined_transcript = ""
         os.system('clear')
         queue = []
         current_prompt_tokens = 0
@@ -65,9 +70,17 @@ while True:
         print("")
         continue
     elif prompt == 'export':
-        filename = input(prompt_color + "\nFilename: \033[0m")
+        if youtube_mode:
+            filename = video_title
+        else:
+            filename = input(prompt_color + "\nFilename: \033[0m")
         filename = os.path.join(export_dir,filename) + '.txt'
-        with open(filename, 'w') as f:
+        if youtube_mode:
+            with open(filename, 'w') as f:
+                f.write('Video Title: ' + video_title + '\n\n')
+                f.write('Transcript:\n')
+                f.write(joined_transcript + '\n\n')
+        with open(filename, 'a') as f:
             f.write("\n".join([x[0] for x in queue]))
         print(header_color + '\n Conversation exported to ' + filename + '\033[0m')
         print("")
@@ -106,6 +119,47 @@ while True:
             os.remove(os.path.join(backup_dir,filename))
         print(header_color + '\n All saved conversations have been deleted. ' + '\033[0m')
         print("")
+        continue
+    elif is_youtube_url(prompt):
+        video_title = get_youtube_title(prompt)
+        if video_title is None:
+            print(header_color + '\n Oops! Video not found. ' + '\033[0m')
+            print("")
+            continue
+        transcript = get_transcript(prompt)
+        if transcript is None:
+            print(header_color + '\n Oops! No English subtitles are available. ' + '\033[0m')
+            print("")
+            continue
+        transcript_text = get_transcript_text(transcript).split('\n')
+        print(header_color + f'\n Video Title: {video_title}' + '\033[0m')
+        print(text_color + f"\n Transcript:\033[0m\n")
+        joined_transcript = ' '.join(transcript_text)
+        print(joined_transcript)
+        print("")
+        err_flag = False
+        with Halo(text='Getting Summary...', spinner='dots'):
+            summary = ''
+            batch_size = 300 # Max number of lines assuing 10 words per line
+            for i in range(0, len(transcript_text), batch_size):
+                batch = transcript_text[i:i+batch_size]
+                batch = ' '.join(batch)
+                combined_prompt = f'Summarise the following\n"""{batch}"""'
+                try:
+                    completion = openai.Completion().create(engine='text-davinci-003',prompt=combined_prompt, max_tokens=1000)
+                    summary += completion.choices[0].text
+                except Exception as e:
+                    print('Oops, something went wrong. Try again later!\n')
+                    logging.error(e)
+                    err_flag = True
+                    break
+        if err_flag:
+            continue
+        youtube_mode = True # Switch to youtube mode
+        print(header_color + 'Summary:' + '\033[0m')
+        print(summary)
+        print("")
+        push_in_queue([f'Summary:\n {summary}\n', completion.usage.completion_tokens])
         continue
     elif prompt == 'help':
         print(header_color + '\n Commands: \n' + '\033[0m')
