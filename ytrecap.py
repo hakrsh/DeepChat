@@ -38,13 +38,16 @@ def get_transcript_text(raw_transcript):
     return formatter.format_transcript(raw_transcript)
 
 if __name__ == '__main__':
-    url = input("Enter a YouTube URL: ")
-    print(get_youtube_id(url))
-    print(get_youtube_title(url))
-    raw_transcript = get_transcript(url)
-    print(raw_transcript)
-    text = get_transcript_text(raw_transcript)
-    print(text)
-    print(type(text))
+    url = input("Enter a YouTube URL: ").strip()
+    transcript = get_transcript(url)
+    if transcript is not None:
+        with open('./export/' + get_youtube_title(url) + ".txt", "w") as f:
+            transcript_text = get_transcript_text(transcript).split('\n')
+            text = ' '.join(transcript_text)
+            f.write(text)
+            print("Transcript saved to ./export/" + get_youtube_title(url) + ".txt")
+    else:
+        print("Invalid YouTube URL")
+
    
 
